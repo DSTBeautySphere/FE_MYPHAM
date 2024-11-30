@@ -30,8 +30,33 @@ export const ProductDetail = () => {
   const user = useSelector(selectUser);
   const [rating, setRating] = useState<number>(0);
   const [comment, setComment] = useState<string>("");
+  const [checkUserBoughtProduct, setcheckUserBoughtProduct] = useState(false);
   const navigate = useNavigate();
 
+  useEffect (()=> {
+    const formData={
+      ma_user: user?.ma_user,
+      ma_san_pham: id
+      
+  }
+
+  console.log(formData);
+      const checkUserBoughtProduct=async()=>{
+        const response=await reviewService.checkUserBoughtProduct(formData);
+        console.log("đaa",response[0]);
+        if(response[0])
+        {
+          console.log("heloo");
+          setcheckUserBoughtProduct(response[0]);
+        }else
+        {
+          console.log("kkkk");
+          setcheckUserBoughtProduct(response[0]);
+        }
+      }
+
+      checkUserBoughtProduct();
+  },[])
   const fetchProduct = async () => {
     const response = await productsService.getById(id!);
     return response.data;
@@ -162,7 +187,7 @@ export const ProductDetail = () => {
                     </span>
                   </span>
                 </div>
-
+                {/* Mô Tả */}
                 <div>
                   {data.mo_ta.length > 0 && data.mo_ta.map((item, index) => (
                     <div key={index} className='mb-5'>
@@ -202,9 +227,10 @@ export const ProductDetail = () => {
                 )}
               </div>
             </div>
-
+{/* hhhhhh */}
+                  
             <div className='container mt-10'>
-              <Heading text='Đánh giá' />
+              {checkUserBoughtProduct?<><Heading text='Đánh giá' />
               <form onSubmit={handleSubmitReview} className='mb-4'>
                 <div className='grid grid-cols-2'>
                   <div className='space-y-4'>
@@ -217,7 +243,8 @@ export const ProductDetail = () => {
                     <Button type='submit'>Gửi đánh giá</Button>
                   </div>
                 </div>
-              </form>
+              </form></>:<></>}
+              
               {isReviewSuccess && (
                 <ul className='space-y-4'>
                   {reviews.map((item) => (

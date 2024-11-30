@@ -4,8 +4,9 @@ import { OrderDetail as OrderDetailType } from "@/types/order.type";
 import stringUtil from "@/utils/string.util";
 import { useQuery } from "@tanstack/react-query";
 import { HttpStatusCode } from "axios";
+
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 export default function OrderDetail() {
   const { id } = useParams();
@@ -54,13 +55,16 @@ export default function OrderDetail() {
             {isSuccess &&
               data.chi_tiet_don_dat.map((order) => (
                 <tr key={order.ma_chi_tiet_don_dat} className='bg-white border-b'>
-                  <td className='px-6 py-4'>{order.bien_the_san_pham.san_pham.ten_san_pham}</td>
-                  <td className='px-6 py-4'>
-                    {order.bien_the_san_pham.mau_sac || order.bien_the_san_pham.loai_da || order.bien_the_san_pham.dung_tich}
-                  </td>
-                  <td className='px-6 py-4'>{order.so_luong}</td>
-                  <td className='px-6 py-4'>{stringUtil.formatPrice(+order.gia_ban)}</td>
-                </tr>
+                <td className='px-6 py-4'>{order.bien_the_san_pham.san_pham.ten_san_pham}</td>
+                <td className='px-6 py-4'>
+                  {order.bien_the_san_pham.mau_sac || order.bien_the_san_pham.loai_da || order.bien_the_san_pham.dung_tich}
+                </td>
+                <td className='px-6 py-4'>{order.so_luong}</td>
+                <td className='px-6 py-4'>{stringUtil.formatPrice(+order.gia_ban)}</td>
+                <td><Link to={`/product/${order.bien_the_san_pham.san_pham.ma_san_pham}`}>Chi Tiết</Link></td>
+              </tr>
+                // <Link to={`/product/${order.bien_the_san_pham.san_pham.ma_san_pham}`}></Link>
+                
               ))}
           </tbody>
         </table>

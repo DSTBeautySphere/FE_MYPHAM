@@ -53,6 +53,7 @@ export default function Products() {
               </div>
             ))}
         </div>
+      
         <div className='col-span-10 min-h-[50vh]'>
           <div className='grid grid-cols-3 gap-x-10'>
             {isProductSuccess && products.map((product) => <ProductItem key={product.ma_san_pham} product={product} />)}

@@ -8,6 +8,12 @@ class ReviewService {
   async create(payload: any) {
     return await http.post("review/create", payload);
   }
+
+  async checkUserBoughtProduct(formData:any)
+  {
+    const response=  await http.post("checkboughtproduct",formData);
+    return response.data;
+  }
 }
 
 export default new ReviewService();

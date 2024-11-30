@@ -29,6 +29,10 @@ export const Profile = () => {
             <li className='px-3 py-2' onClick={handleLogout}>
               Đăng xuất
             </li>
+            <li className='px-3 py-2' >
+              <Link to={'/reset-password'}>Đổi Mật Khẩu</Link>
+             
+            </li>
           </ul>
         </div>
       </div>

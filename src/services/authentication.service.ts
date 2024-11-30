@@ -16,6 +16,11 @@ class AuthenticationService {
   async changePassword(payload: any) {
     return await http.post("/password/change", payload);
   }
+
+  async changePasswordByEmail(ten_dang_nhap: string) {
+    return await http.post("/sendemailupdatepassword", { ten_dang_nhap });
+  }
+  
 }
 
 export default new AuthenticationService();

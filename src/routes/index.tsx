@@ -10,6 +10,7 @@ import History from "@/pages/history";
 import Products from "@/pages/products";
 import ForgotPassword from "@/pages/forgot-password";
 import OrderDetail from "@/pages/order-detail";
+import ResetPassword from "@/pages/reset-password";
 
 interface IRouteChildren {
   path: string;
@@ -63,6 +64,10 @@ const publicRoutes: IRoute = {
     {
       path: "/new-arrival",
       component: Products,
+    },
+    {
+      path: "/reset-password",
+      component: ResetPassword,
     },
   ],
 };

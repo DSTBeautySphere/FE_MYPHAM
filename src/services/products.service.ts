@@ -1,8 +1,8 @@
 import http from "@/libs/http";
 
 class ProductsService {
-  async getByGroupId(groupId: number) {
-    return await http.get(`/products/category/${groupId}`);
+  async getByGroupId(groupId: number,page: number = 1) {
+    return await http.get(`/products/category/${groupId}?page=${page}`);
   }
 
   async getById(id: string) {

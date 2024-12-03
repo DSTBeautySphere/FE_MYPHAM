@@ -85,7 +85,7 @@ export default function ResetPassword() {
       <div
         className='w-[500px] mx-auto p-[40px] my-[80px] rounded-[24px] border-[#E9E9E9] border'
         style={{ boxShadow: "0px 2px 12px 0px #0000000A" }}>
-        <Heading text='Quên mật khẩu' />
+        <Heading text='Đổi Mật Khẩu' />
         {!isSuccess ? (
           <form onSubmit={onSubmit} autoComplete='off'>
             <div className='mb-5'>

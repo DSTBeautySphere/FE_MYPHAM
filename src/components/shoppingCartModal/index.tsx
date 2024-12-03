@@ -67,10 +67,24 @@ export const ShoppingCartModal = () => {
     }
   }, [isOpenModal, refetch, data]);
 
-  const handleNavigateToCheckout = () => {
+  const handleNavigateToCheckout = async () => {
+    // Check if all items have a valid quantity (quantity <= stock)
+    const invalidItems = data?.some(item => {
+      const availableStock = item.bien_the_san_pham.so_luong_ton_kho;
+      return item.so_luong > availableStock;
+    });
+  
+    if (invalidItems) {
+      alert("Số lượng sản phẩm không hợp lệ hoặc vượt quá số lượng có sẵn.");
+     
+      return; // Prevent navigation if there's an invalid item
+    }
+  
+    // If all quantities are valid, proceed to checkout
     dispatch(openModal(false));
     navigate("/checkout");
   };
+  
 
   return (
     <div>

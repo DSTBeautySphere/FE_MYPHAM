@@ -6,8 +6,12 @@ import { useSelector } from "react-redux";
 
 interface Voucher {
   ma_voucher: number;
+  code_voucher: string;
   ten_voucher: string;
   muc_giam_gia: number;
+  loai_giam_gia:string;
+  gia_tri_dieu_kien:number;
+  giam_gia_toi_da:number;
   ngay_bat_dau: string;
   ngay_ket_thuc: string;
   dieu_kien_ap_dung: string;
@@ -73,16 +77,23 @@ export default function Voucher() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h2 className="text-2xl font-bold mb-6">Khuyến Mãi Hiện Tại</h2>
+      <h2 className="text-2xl font-bold mb-6">Voucher Hiện Tại</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {vouchers.map((voucher) => (
           <div key={voucher.ma_voucher} className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-all duration-300">
             <div className="flex justify-between items-center mb-4">
               <img src={logo} alt={voucher.ten_voucher} className="w-16 h-16 object-cover rounded-md" />
-              <div className="text-center">
-                <p className="text-xl font-semibold text-red-600">{voucher.muc_giam_gia}%</p>
-                <p className="text-xs text-gray-500">Giảm giá</p>
-              </div>
+              {voucher.loai_giam_gia === "Phần trăm" ? (
+                    <p className="text-xl font-semibold text-red-600">{voucher.muc_giam_gia}%</p>
+                  ) : (
+                    <p className="text-xl font-semibold text-red-600">
+                      {voucher.muc_giam_gia.toLocaleString("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                      })} VNĐ
+                    </p>
+                  )}
+                  <p className="text-xs text-gray-500">Giảm giá</p>
             </div>
             <h3 className="text-lg font-semibold mb-2">{voucher.ten_voucher}</h3>
             <p className="text-sm text-gray-500"><strong>Ngày bắt đầu:</strong> {voucher.ngay_bat_dau}</p>

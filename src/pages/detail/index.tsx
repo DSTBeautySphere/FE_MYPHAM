@@ -19,6 +19,8 @@ import reviewService from "@/services/review.service";
 import { Review } from "@/types/review.type";
 import { Rating } from "@/components/rating";
 import StarRating from "@/components/star-rating";
+import RecommenderList from "@/components/recommenderList";
+import ProductList from "@/components/productList";
 
 export const ProductDetail = () => {
   const { id } = useParams();
@@ -83,6 +85,13 @@ export const ProductDetail = () => {
 
   const handleAddToCart = async () => {
     if (isAuthenticated && user) {
+      const selectedOption = data?.bien_the_san_pham.find(item => item.ma_bien_the === option);
+      if (selectedOption && quantity > selectedOption.so_luong_ton_kho) {
+        // Thông báo nếu số lượng vượt quá tồn kho
+        toast.error(`Số lượng không thể vượt quá ${selectedOption.so_luong_ton_kho}`);
+        setQuantity(selectedOption.so_luong_ton_kho); // Cập nhật lại số lượng
+        return; // Dừng lại không thêm vào giỏ hàng
+      }
       setIsLoading(true);
       try {
         const payload = {
@@ -91,9 +100,9 @@ export const ProductDetail = () => {
           quantity: quantity,
           price: price,
         };
-
+  
         const response = await cartService.addToCart(payload);
-
+  
         if (response.status === HttpStatusCode.Ok) {
           toast.success("Thêm vào giỏ hàng thành công");
         }
@@ -106,7 +115,7 @@ export const ProductDetail = () => {
       navigate("/account/login");
     }
   };
-
+  
   useEffect(() => {
     window.scrollTo(0, 0);
     if (isSuccess && data) {
@@ -144,15 +153,27 @@ export const ProductDetail = () => {
     if(!isAuthenticated){
       return navigate("/account/login");
     }
-
+    let adjustedRating = rating;
+    if (rating === 1) {
+      adjustedRating = 5;
+    } else if (rating === 2) {
+      adjustedRating = 4;
+    } else if (rating === 3) {
+      adjustedRating = 3;
+    } else if (rating === 4) {
+      adjustedRating = 2;
+    } else if (rating === 5) {
+      adjustedRating = 1;
+    }
+  
     try {
       const payload = {
         ma_san_pham: id,
         ma_user: user?.ma_user,
-        so_sao: rating,
+        so_sao: adjustedRating,
         noi_dung: comment,
       };
-
+ console.log("Số Sao Nè:"+rating);
       const response = await reviewService.create(payload);
 
       if (response.status === HttpStatusCode.Ok) {
@@ -227,6 +248,13 @@ export const ProductDetail = () => {
                 )}
               </div>
             </div>
+            
+           
+              
+            <RecommenderList groupCode={data?.ma_san_pham || 0} title="Gợi Ý Sản Phẩm" />
+          
+
+
 {/* hhhhhh */}
                   
             <div className='container mt-10'>

@@ -20,6 +20,10 @@ class ProductsService {
   async getRecommenderProduct(ma_san_pham:number, so_goi_y:number) {
     return await http.get(`/timsanphamtuongtu?ma_san_pham=${ma_san_pham}&so_goi_y=${so_goi_y}`);
   }
+
+  async getRecommenderProductID3(ma_san_pham:number, so_goi_y:number) {
+    return await http.get(`/goiysanphamdt`);
+  }
 }
 
 export default new ProductsService();

@@ -50,7 +50,9 @@ export default function Voucher() {
 
     fetchVouchers();
   }, [user]);
-
+  const formatToInteger = (number: number) => {
+    return Math.round(number);
+  };
   // Hàm lưu voucher và xóa ngay khi lưu thành công
   const handleSaveVoucher = async (voucherId: number) => {
     if (!user?.ma_user) {  // Kiểm tra lại nếu người dùng chưa đăng nhập
@@ -87,10 +89,7 @@ export default function Voucher() {
                     <p className="text-xl font-semibold text-red-600">{voucher.muc_giam_gia}%</p>
                   ) : (
                     <p className="text-xl font-semibold text-red-600">
-                      {voucher.muc_giam_gia.toLocaleString("vi-VN", {
-                        style: "currency",
-                        currency: "VND",
-                      })} VNĐ
+                      {formatToInteger(voucher.muc_giam_gia)} VNĐ
                     </p>
                   )}
                   <p className="text-xs text-gray-500">Giảm giá</p>

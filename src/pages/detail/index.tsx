@@ -251,7 +251,7 @@ export const ProductDetail = () => {
             
            
               
-            <RecommenderList groupCode={data?.ma_san_pham || 0} title="Gợi Ý Sản Phẩm" />
+            <RecommenderList groupCode={data?.ma_san_pham || 0} title="Sản Phẩm Tương Tự" />
           
 
 

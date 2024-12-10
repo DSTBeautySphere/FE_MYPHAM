@@ -2,17 +2,19 @@ import { selectIsAuthenticated, selectUser } from "@/redux/features/auth/auth.se
 import orderService from "@/services/order.service";
 import { Order } from "@/types/order.type";
 import stringUtil from "@/utils/string.util";
-import { useQuery } from "@tanstack/react-query";
+import { QueryClient, useQuery } from "@tanstack/react-query";
+
 import { HttpStatusCode } from "axios";
 import { useEffect } from "react";
+import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-
+import { useQueryClient } from "@tanstack/react-query";
 export default function History() {
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const user = useSelector(selectUser);
   const navigate = useNavigate();
-
+  const queryClient = useQueryClient();
   const fetchData = async () => {
     if (isAuthenticated && user) {
       const response = await orderService.getOrder(user.ma_user);
@@ -36,6 +38,25 @@ export default function History() {
       navigate("/account/login");
     }
   }, [isAuthenticated, navigate]);
+
+  const handleCancelOrder = async (orderId: number) => {
+    if (window.confirm("Bạn có chắc muốn hủy đơn hàng này?")) {
+      try {
+        const response = await orderService.huyDon(orderId);
+        if (response.status === HttpStatusCode.Ok) {
+          toast.success("Hủy đơn hàng thành công!");
+          // Gọi lại dữ liệu để cập nhật danh sách đơn
+          queryClient.invalidateQueries({ queryKey: ["orders"] });  
+        } else {
+          toast.error("Không thể hủy đơn hàng. Vui lòng thử lại!");
+        }
+      } catch (error) {
+        console.error("Lỗi khi hủy đơn hàng:", error);
+        toast.error("Đã xảy ra lỗi. Vui lòng thử lại!");
+      }
+    }
+  };
+  
 
   return (
     <div className='container min-h-[50vh] mt-20'>
@@ -64,7 +85,12 @@ export default function History() {
               <th scope='col' className='px-6 py-3'>
                 Trạng thái
               </th>
-              <th scope='col' className='px-6 py-3'></th>
+              <th scope='col' className='px-6 py-3'>
+                Chi tiết
+              </th>
+              <th scope='col' className='px-6 py-3'>
+                Hủy đơn
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -81,6 +107,18 @@ export default function History() {
                   <td className='px-6 py-4'>
                     <Link to={`/order/history/${order.ma_don_dat}`}>Xem chi tiết</Link>
                   </td>
+                  <td className='px-6 py-4'>
+                    
+                    {order.trang_thai_don_dat === "Chờ xác nhận" && (
+                      <button
+                        className='text-red-500 hover:underline'
+                        onClick={() => handleCancelOrder(order.ma_don_dat)}
+                      >
+                        Hủy đơn
+                      </button>
+                    )}
+                  </td>
+
                 </tr>
               ))}
           </tbody>
